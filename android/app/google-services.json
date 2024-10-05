@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "585354265025",
+    "project_id": "pgfinderdemo",
+    "storage_bucket": "pgfinderdemo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:585354265025:android:9010881f376d7406e22f40",
+        "android_client_info": {
+          "package_name": "com.example.pgfindertest"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdGcDWsSSWwlfH8P3unMzkr5Jfw9IkdFY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
