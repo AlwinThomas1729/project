@@ -1,11 +1,19 @@
+//
+//
+//
+//
+//
+//
+//
+//
+// rout to logged in users pages ( could be student or owner )
 import 'package:flutter/material.dart';
 
-// Assuming you have StudentPage and TeacherPage widgets
-import 'student.dart'; // Import your StudentPage widget
-import 'teacher.dart'; // Import your TeacherPage widget
+import 'student.dart';
+import 'Owner.dart';
 
 class HomePage extends StatefulWidget {
-  final String userRole; // 'student' or 'teacher'
+  final String userRole; // 'student' or 'Owner'
 
   const HomePage({super.key, required this.userRole});
 
@@ -25,10 +33,10 @@ class _HomePageState extends State<HomePage> {
       // Navigate to StudentPage
       Future.microtask(() => Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => const Student())));
-    } else if (widget.userRole == 'Teacher') {
-      // Navigate to TeacherPage
+    } else if (widget.userRole == 'Owner') {
+      // Navigate to OwnerPage
       Future.microtask(() => Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const Teacher())));
+          context, MaterialPageRoute(builder: (context) => const Owner())));
     }
   }
 

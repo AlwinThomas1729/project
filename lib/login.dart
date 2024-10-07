@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'student.dart';
-import 'teacher.dart';
+import 'Owner.dart';
 import 'register.dart';
 
 class LoginPage extends StatefulWidget {
@@ -260,9 +260,9 @@ class _LoginPageState extends State<LoginPage> {
 
       if (documentSnapshot.exists) {
         String role = documentSnapshot.get('role');
-        if (role == "Teacher") {
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const Teacher()));
+        if (role == "Owner") {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => const Owner()));
         } else {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => const Student()));
@@ -272,14 +272,35 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _showError(FirebaseAuthException e) {
-    String errorMessage = 'An error occurred';
+    String errorMessage = 'Oops... something went wrong.';
+
+    // Customize error message based on Firebase exception code
     if (e.code == 'user-not-found') {
       errorMessage = 'No user found for that email.';
     } else if (e.code == 'wrong-password') {
       errorMessage = 'Wrong password provided.';
     }
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(errorMessage)),
+
+    // Show an AlertDialog with the error message and a button to go back to the login page
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Oops... Something went wrong'),
+          content: Text(errorMessage),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                );
+              },
+              child: const Text('Login Again'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
