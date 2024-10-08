@@ -1,19 +1,13 @@
-//
-//
-//
-//
-//
-//
-//
-// for logged in owner.option to add new hostel and edit existing hostels
+// owner.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'add_hostel.dart';
-import 'owner_drawer.dart';
+import 'add_hostel.dart'; // Import your AddHostel widget
+import 'owner_drawer.dart'; // Import your Drawer widget
+import 'hostel_detail_display.dart'; // Import the new detail page
 
 class Owner extends StatefulWidget {
-  const Owner({super.key});
+  const Owner({Key? key}) : super(key: key);
 
   @override
   _OwnerState createState() => _OwnerState();
@@ -21,16 +15,16 @@ class Owner extends StatefulWidget {
 
 class _OwnerState extends State<Owner> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  String ownerId = ''; // Initialize ownerId to an empty string
+  String userId = '';
 
   @override
   void initState() {
     super.initState();
-    _fetchOwnerId();
+    _fetchUserId();
   }
 
-  // Function to fetch the owner ID from the users collection
-  Future<void> _fetchOwnerId() async {
+  // Function to fetch the userId from the users collection
+  Future<void> _fetchUserId() async {
     User? user = _auth.currentUser;
     if (user != null) {
       DocumentSnapshot userDoc = await FirebaseFirestore.instance
@@ -38,22 +32,21 @@ class _OwnerState extends State<Owner> {
           .doc(user.uid)
           .get();
       setState(() {
-        ownerId = userDoc['userId']
-            .toString(); // Assuming owner_id is stored as userId
+        userId =
+            userDoc['userId'].toString(); // Assuming userId is stored as such
       });
     }
   }
 
-  // Function to fetch hostels owned by the logged-in owner
+  // Function to fetch hostels based on the userId
   Stream<QuerySnapshot> _getHostels() {
-    if (ownerId.isEmpty) {
-      // Return an empty stream if ownerId is not set
+    if (userId.isEmpty) {
       return const Stream.empty();
     }
 
     return FirebaseFirestore.instance
         .collection('hostel')
-        .where('hostel_owner_number', isEqualTo: ownerId)
+        .where('userId', isEqualTo: userId)
         .snapshots();
   }
 
@@ -61,9 +54,9 @@ class _OwnerState extends State<Owner> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Owner Dashboard'),
+        title: const Text('Hostels List'),
       ),
-      drawer: const CustomDrawer(), // Add the drawer here
+      drawer: const CustomDrawer(), // Use your CustomDrawer widget here
       body: Column(
         children: [
           Expanded(
@@ -84,12 +77,30 @@ class _OwnerState extends State<Owner> {
                   itemCount: hostels.length,
                   itemBuilder: (context, index) {
                     DocumentSnapshot hostel = hostels[index];
+
+                    // Ensure answers array exists and has at least one element
+                    List<dynamic> answers = hostel['answers'] ?? [];
+                    String hostelName = answers.isNotEmpty
+                        ? answers[0]
+                        : 'No Name'; // Default value if array is empty
+
                     return ListTile(
                       title: Text(
-                        hostel['hostelName'], // Display hostel name
+                        hostelName, // Display the name of the hostel
                         style: const TextStyle(fontSize: 18),
                       ),
-                      subtitle: Text('Room Number: ${hostel['roomNumber']}'),
+                      onTap: () {
+                        // Navigate to the detail page
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HostelDetailPage(
+                              hostelId: hostel.id, // Pass the hostel ID
+                              userId: userId, // Pass the user ID
+                            ),
+                          ),
+                        );
+                      },
                     );
                   },
                 );
@@ -100,21 +111,10 @@ class _OwnerState extends State<Owner> {
             padding: const EdgeInsets.all(16.0),
             child: ElevatedButton(
               onPressed: () {
-                if (ownerId.isNotEmpty) {
-                  // Ensure ownerId is set
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => AddHostel()),
-                  );
-                } else {
-                  // Optionally, show an error message or snackbar
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content:
-                          Text('Owner ID not defined. Please try again later.'),
-                    ),
-                  );
-                }
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AddHostel()),
+                );
               },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(
@@ -123,7 +123,7 @@ class _OwnerState extends State<Owner> {
                 ),
                 textStyle: const TextStyle(fontSize: 18),
               ),
-              child: const Text('Add Hostel'),
+              child: const Text('Add User'),
             ),
           ),
         ],

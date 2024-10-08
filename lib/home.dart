@@ -10,7 +10,7 @@
 import 'package:flutter/material.dart';
 
 import 'student.dart';
-import 'Owner.dart';
+import 'owner.dart';
 
 class HomePage extends StatefulWidget {
   final String userRole; // 'student' or 'Owner'
@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
     } else if (widget.userRole == 'Owner') {
       // Navigate to OwnerPage
       Future.microtask(() => Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const Owner())));
+          context, MaterialPageRoute(builder: (context) => Owner())));
     }
   }
 

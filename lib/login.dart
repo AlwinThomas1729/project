@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'student.dart';
-import 'Owner.dart';
+import 'owner.dart';
 import 'register.dart';
 
 class LoginPage extends StatefulWidget {
@@ -280,27 +280,5 @@ class _LoginPageState extends State<LoginPage> {
     } else if (e.code == 'wrong-password') {
       errorMessage = 'Wrong password provided.';
     }
-
-    // Show an AlertDialog with the error message and a button to go back to the login page
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Oops... Something went wrong'),
-          content: Text(errorMessage),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LoginPage()),
-                );
-              },
-              child: const Text('Login Again'),
-            ),
-          ],
-        );
-      },
-    );
   }
 }
