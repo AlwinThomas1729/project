@@ -1,4 +1,3 @@
-// import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:flutter/material.dart';
 
 // class FilterPage extends StatefulWidget {
@@ -10,167 +9,55 @@
 
 // class _FilterPageState extends State<FilterPage> {
 //   final List<String> _categories = [
-//     'Rent',
-//     'Distance',
-//     'Mess',
+//     'rent',
+//     'distance',
+//     'mess',
+//     'hostel_type',
+//     'restriction',
+//     'refrigerator',
+//     'washing_machine',
+//     'wifi',
+//     'kitchen'
 //   ];
 
 //   final Map<String, List<String>> _filterOptions = {
-//     'Rent': [
+//     'rent': [
 //       'Less than 2000',
 //       'Between 2000 - 3000',
 //       'Between 3000 - 4000',
-//       'More than 4000',
+//       'More than 4000'
 //     ],
-//     'Distance': [
+//     'distance': [
 //       'Less than 500 meters',
 //       'Between 0.5 - 1 Kilometer',
 //       'Between 1 - 1.5 Kilometers',
-//       'More than 2 Kilometers',
+//       'More than 2 Kilometers'
 //     ],
-//     'Mess': [
-//       'Yes',
-//       'No',
+//     'mess': ['Yes', 'No'],
+//     'hostel_type': ['Boys Hostel', 'Girls Hostel', 'Co-ed Hostel'],
+//     'restriction': [
+//       '10 PM or Before that',
+//       '11 PM',
+//       '12 AM',
+//       'Anytime, but inform warden',
+//       'None'
 //     ],
+//     'refrigerator': ['Yes', 'No'],
+//     'washing_machine': ['Yes', 'No'],
+//     'wifi': ['Yes', 'No', 'Installable'],
+//     'kitchen': ['Yes', 'No'],
 //   };
 
 //   final Map<String, Set<String>> _selectedFilters = {
-//     'Rent': {},
-//     'Distance': {},
-//     'Mess': {},
-//   };
-
-//   String? _selectedCategory;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('Filter Options'),
-//         backgroundColor: Colors.blueAccent,
-//       ),
-//       body: Row(
-//         children: [
-//           // 30% width for filter categories
-//           Container(
-//             width: MediaQuery.of(context).size.width * 0.35,
-//             padding: const EdgeInsets.all(8.0),
-//             color: Colors.blue[50],
-//             child: ListView(
-//               children: _categories.map((category) {
-//                 return ListTile(
-//                   title: Row(
-//                     mainAxisSize:
-//                         MainAxisSize.min, // Only take as much space as needed
-//                     children: [
-//                       Expanded(
-//                         child: Text(
-//                           category,
-//                           textAlign:
-//                               TextAlign.left, // Ensure text is left-aligned
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                   onTap: () {
-//                     setState(() {
-//                       _selectedCategory = category;
-//                     });
-//                   },
-//                 );
-//               }).toList(),
-//             ),
-//           ),
-//           // 70% width for displaying corresponding options
-//           Expanded(
-//             child: _selectedCategory == null
-//                 ? const Center(child: Text('Select a category to see options'))
-//                 : _buildOptionsForSelectedCategory(),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-
-//   Widget _buildOptionsForSelectedCategory() {
-//     List<String>? options = _filterOptions[_selectedCategory];
-
-//     return Container(
-//       padding: const EdgeInsets.all(16.0),
-//       child: Column(
-//         children: [
-//           Text(
-//             'Options for $_selectedCategory',
-//             style: const TextStyle(
-//               fontSize: 20,
-//               fontWeight: FontWeight.bold,
-//             ),
-//           ),
-//           const SizedBox(height: 16.0),
-//           Expanded(
-//             child: ListView(
-//               children: options!.map((option) {
-//                 return CheckboxListTile(
-//                   title: Text(option),
-//                   value: _selectedFilters[_selectedCategory]?.contains(option),
-//                   onChanged: (selected) {
-//                     setState(() {
-//                       if (selected == true) {
-//                         _selectedFilters[_selectedCategory]?.add(option);
-//                       } else {
-//                         _selectedFilters[_selectedCategory]?.remove(option);
-//                       }
-//                     });
-//                   },
-//                 );
-//               }).toList(),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-// import 'package:flutter/material.dart';
-
-// class FilterPage extends StatefulWidget {
-//   const FilterPage({Key? key}) : super(key: key);
-
-//   @override
-//   State<FilterPage> createState() => _FilterPageState();
-// }
-
-// class _FilterPageState extends State<FilterPage> {
-//   final List<String> _categories = [
-//     'Rent',
-//     'Distance',
-//     'Mess',
-//   ];
-
-//   final Map<String, List<String>> _filterOptions = {
-//     'Rent': [
-//       'Less than 2000',
-//       'Between 2000 - 3000',
-//       'Between 3000 - 4000',
-//       'More than 4000',
-//     ],
-//     'Distance': [
-//       'Less than 500 meters',
-//       'Between 0.5 - 1 Kilometer',
-//       'Between 1 - 1.5 Kilometers',
-//       'More than 2 Kilometers',
-//     ],
-//     'Mess': [
-//       'Yes',
-//       'No',
-//     ],
-//   };
-
-//   final Map<String, Set<String>> _selectedFilters = {
-//     'Rent': {},
-//     'Distance': {},
-//     'Mess': {},
+//     'rent': {},
+//     'distance': {},
+//     'mess': {},
+//     'hostel_type': {},
+//     'restriction': {},
+//     'refrigerator': {},
+//     'washing_machine': {},
+//     'wifi': {},
+//     'kitchen': {},
 //   };
 
 //   String? _selectedCategory;
@@ -187,41 +74,32 @@
 //           Expanded(
 //             child: Row(
 //               children: [
-//                 // 30% width for filter categories
+//                 // 45% width for filter categories
 //                 Container(
-//                   width: MediaQuery.of(context).size.width * 0.35,
+//                   width: MediaQuery.of(context).size.width * 0.45,
 //                   padding: const EdgeInsets.all(8.0),
 //                   color: Colors.blue[50],
 //                   child: ListView(
 //                     children: _categories.map((category) {
 //                       return ListTile(
-//                         title: Row(
-//                           mainAxisSize: MainAxisSize
-//                               .min, // Only take as much space as needed
-//                           children: [
-//                             Expanded(
-//                               child: Text(
-//                                 category,
-//                                 textAlign: TextAlign
-//                                     .left, // Ensure text is left-aligned
-//                               ),
-//                             ),
-//                           ],
-//                         ),
+//                         title: Text(category, textAlign: TextAlign.left),
 //                         onTap: () {
 //                           setState(() {
 //                             _selectedCategory = category;
 //                           });
 //                         },
+//                         selected: _selectedCategory == category,
+//                         selectedTileColor: Colors.blue[100],
 //                       );
 //                     }).toList(),
 //                   ),
 //                 ),
-//                 // 70% width for displaying corresponding options
+//                 // 55% width for displaying corresponding options
 //                 Expanded(
 //                   child: _selectedCategory == null
 //                       ? const Center(
-//                           child: Text('Select a category to see options'))
+//                           child: Text('Select a category to see options'),
+//                         )
 //                       : _buildOptionsForSelectedCategory(),
 //                 ),
 //               ],
@@ -231,7 +109,7 @@
 //           Padding(
 //             padding: const EdgeInsets.all(16.0),
 //             child: ElevatedButton(
-//               onPressed: _applyFilters, // Call the function to apply filters
+//               onPressed: _applyFilters,
 //               style: ElevatedButton.styleFrom(
 //                 backgroundColor: Colors.blueAccent,
 //                 padding:
@@ -248,7 +126,7 @@
 //   }
 
 //   Widget _buildOptionsForSelectedCategory() {
-//     List<String>? options = _filterOptions[_selectedCategory];
+//     final options = _filterOptions[_selectedCategory];
 
 //     return Container(
 //       padding: const EdgeInsets.all(16.0),
@@ -256,10 +134,7 @@
 //         children: [
 //           Text(
 //             'Options for $_selectedCategory',
-//             style: const TextStyle(
-//               fontSize: 20,
-//               fontWeight: FontWeight.bold,
-//             ),
+//             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
 //           ),
 //           const SizedBox(height: 16.0),
 //           Expanded(
@@ -267,7 +142,9 @@
 //               children: options!.map((option) {
 //                 return CheckboxListTile(
 //                   title: Text(option),
-//                   value: _selectedFilters[_selectedCategory]?.contains(option),
+//                   value:
+//                       _selectedFilters[_selectedCategory]?.contains(option) ??
+//                           false,
 //                   onChanged: (selected) {
 //                     setState(() {
 //                       if (selected == true) {
@@ -287,11 +164,10 @@
 //   }
 
 //   void _applyFilters() {
-//     // Handle filter application logic here, for example, send the selected filters back to the previous screen
-//     // or filter the data in the current screen.
+//     // Print selected filters for debugging
 //     print('Selected filters: $_selectedFilters');
 
-//     // Example: You could navigate back and pass the filters
+//     // Pass the selected filters back to the previous screen
 //     Navigator.pop(context, _selectedFilters);
 //   }
 // }
@@ -306,7 +182,17 @@ class FilterPage extends StatefulWidget {
 }
 
 class _FilterPageState extends State<FilterPage> {
-  final List<String> _categories = ['Rent', 'Distance', 'Mess'];
+  final List<String> _categories = [
+    'Rent',
+    'Distance',
+    'Mess',
+    'Hostel Type',
+    'Restriction',
+    'Refrigerator',
+    'Washing Machine',
+    'WiFi',
+    'Kitchen'
+  ];
 
   final Map<String, List<String>> _filterOptions = {
     'Rent': [
@@ -322,12 +208,30 @@ class _FilterPageState extends State<FilterPage> {
       'More than 2 Kilometers'
     ],
     'Mess': ['Yes', 'No'],
+    'Hostel Type': ['Boys Hostel', 'Girls Hostel', 'Co-ed Hostel'],
+    'Restriction': [
+      '10 PM or Before that',
+      '11 PM',
+      '12 AM',
+      'Anytime, but inform warden',
+      'None'
+    ],
+    'Refrigerator': ['Yes', 'No'],
+    'Washing Machine': ['Yes', 'No'],
+    'WiFi': ['Yes', 'No', 'Installable'],
+    'Kitchen': ['Yes', 'No'],
   };
 
   final Map<String, Set<String>> _selectedFilters = {
     'Rent': {},
     'Distance': {},
     'Mess': {},
+    'Hostel Type': {},
+    'Restriction': {},
+    'Refrigerator': {},
+    'Washing Machine': {},
+    'WiFi': {},
+    'Kitchen': {},
   };
 
   String? _selectedCategory;
@@ -344,9 +248,9 @@ class _FilterPageState extends State<FilterPage> {
           Expanded(
             child: Row(
               children: [
-                // 30% width for filter categories
+                // 45% width for filter categories
                 Container(
-                  width: MediaQuery.of(context).size.width * 0.35,
+                  width: MediaQuery.of(context).size.width * 0.45,
                   padding: const EdgeInsets.all(8.0),
                   color: Colors.blue[50],
                   child: ListView(
@@ -364,11 +268,12 @@ class _FilterPageState extends State<FilterPage> {
                     }).toList(),
                   ),
                 ),
-                // 70% width for displaying corresponding options
+                // 55% width for displaying corresponding options
                 Expanded(
                   child: _selectedCategory == null
                       ? const Center(
-                          child: Text('Select a category to see options'))
+                          child: Text('Select a category to see options'),
+                        )
                       : _buildOptionsForSelectedCategory(),
                 ),
               ],
@@ -433,7 +338,10 @@ class _FilterPageState extends State<FilterPage> {
   }
 
   void _applyFilters() {
-    // Handle filter application logic here, for example, send the selected filters back to the previous screen
+    // Print selected filters for debugging
+    print('Selected filters: $_selectedFilters');
+
+    // Pass the selected filters back to the previous screen
     Navigator.pop(context, _selectedFilters);
   }
 }

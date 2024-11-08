@@ -343,23 +343,23 @@ class _AddHostelState extends State<AddHostel> {
     {
       'question': 'What is your hostel name?',
       'type': 'text',
-      'short': 'hostel_name'
+      'short': 'Hostel Name'
     },
     {
       'question': 'What is your hostel owner/manager name?',
       'type': 'text',
-      'short': 'manager_name'
+      'short': 'Manager Name'
     },
     {
       'question': 'What is owner/manager number?',
       'type': 'integer',
-      'short': 'contact_number'
+      'short': 'Contact Number'
     },
     {
       'question': 'Select the type of hostel:',
       'type': 'multiple_choice',
       'options': ['Boys Hostel', 'Girls Hostel', 'Co-ed Hostel'],
-      'short': 'hostel_type'
+      'short': 'Hostel Type'
     },
     {
       'question': 'Select Rent Range:',
@@ -370,7 +370,7 @@ class _AddHostelState extends State<AddHostel> {
         'Between 3000 - 4000',
         'More than 4000'
       ],
-      'short': 'rent'
+      'short': 'Rent'
     },
     {'question': 'Enter Hostel location:', 'type': 'text', 'short': 'location'},
     {
@@ -384,42 +384,42 @@ class _AddHostelState extends State<AddHostel> {
         'Anytime, but inform warden',
         'None'
       ],
-      'short': 'restriction'
+      'short': 'Restriction'
     },
     {
       'question': 'Is Refrigerator available:',
       'type': 'multiple_choice',
       'options': ['Yes', 'No'],
-      'short': 'refrigerator'
+      'short': 'Refrigerator'
     },
     {
       'question': 'Is Washing Machine available:',
       'type': 'multiple_choice',
       'options': ['Yes', 'No'],
-      'short': 'washing_machine'
+      'short': 'Washing Machine'
     },
     {
       'question': 'Is Mess/Food available:',
       'type': 'multiple_choice',
       'options': ['Yes', 'No'],
-      'short': 'mess'
+      'short': 'Mess'
     },
     {
       'question': 'Is Wi-Fi available:',
       'type': 'multiple_choice',
       'options': ['Yes', 'No', 'Installable'],
-      'short': 'wifi'
+      'short': 'WiFi'
     },
     {
       'question': 'Number of vacancies:',
       'type': 'integer',
-      'short': 'vacancies'
+      'short': 'Vacancies'
     },
     {
       'question': 'Is Kitchen available:',
       'type': 'multiple_choice',
       'options': ['Yes', 'No'],
-      'short': 'kitchen'
+      'short': 'Kitchen'
     },
     {
       'question': 'Distance from Institution:',
@@ -430,9 +430,9 @@ class _AddHostelState extends State<AddHostel> {
         'Between 1 - 1.5 Kilometers',
         'More than 2 Kilometers'
       ],
-      'short': 'distance'
+      'short': 'Distance'
     },
-    {'question': 'Enter Hostel ID', 'type': 'integer', 'short': 'hostel_id'},
+    {'question': 'Enter Hostel ID', 'type': 'integer', 'short': 'Hostel Id'},
   ];
 
   List<TextEditingController> controllers = [];

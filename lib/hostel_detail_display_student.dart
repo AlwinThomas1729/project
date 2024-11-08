@@ -117,7 +117,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-const Color bgcolor = Colors.red; // Background color
+const Color bgcolor = Color.fromARGB(255, 156, 87, 82); // Background color
 const Color textColor = Colors.blue; // Text color
 
 class HostelDetailPage extends StatelessWidget {

@@ -17,8 +17,8 @@
 
 // class _StudentState extends State<Student> {
 //   String? _selectedSortOption;
-//   List<QueryDocumentSnapshot<Map<String, dynamic>>>?
-//       _sortedHostels; // Sorted hostels list
+//   List<QueryDocumentSnapshot<Map<String, dynamic>>>? _filteredHostels;
+//   Map<String, Set<String>> _appliedFilters = {};
 
 //   @override
 //   Widget build(BuildContext context) {
@@ -104,8 +104,8 @@
 //                       return const Center(child: Text('No hostels available'));
 //                     }
 
-//                     // If sorted hostels are available, use them; otherwise use original hostels
-//                     var hostels = _sortedHostels ?? snapshot.data!.docs;
+//                     // If filtered hostels are available, use them; otherwise, use original hostels
+//                     var hostels = _filteredHostels ?? snapshot.data!.docs;
 
 //                     return ListView.builder(
 //                       itemCount: hostels.length,
@@ -164,20 +164,44 @@
 //     );
 //   }
 
-//   void _showFilterOptions(BuildContext context) {
-//     showModalBottomSheet(
-//       context: context,
-//       builder: (BuildContext context) {
-//         return filter(
-//           selectedFilterOption: _selectedSortOption,
-//           onFilterSelected: (option) {
-//             setState(() {
-//               _selectedSortOption = option;
-//             });
-//           },
-//         );
-//       },
+//   void _showFilterOptions(BuildContext context) async {
+//     // Navigate to FilterPage and wait for the selected filters
+//     final selectedFilters = await Navigator.push<Map<String, Set<String>>>(
+//       context,
+//       MaterialPageRoute(builder: (context) => const FilterPage()),
 //     );
+
+//     if (selectedFilters != null) {
+//       setState(() {
+//         _appliedFilters = selectedFilters;
+//         _applyFilters();
+//       });
+//     }
+//   }
+
+//   void _applyFilters() async {
+//     final snapshot =
+//         await FirebaseFirestore.instance.collection('hostels').get();
+//     final allHostels = snapshot.docs;
+
+//     // Apply filter criteria to fetch matching hostels
+//     final filteredHostels = allHostels.where((hostel) {
+//       final hostelData = hostel.data();
+//       bool matchesFilters = true;
+
+//       _appliedFilters.forEach((category, options) {
+//         if (options.isNotEmpty) {
+//           final value = hostelData[category];
+//           matchesFilters &= options.contains(value);
+//         }
+//       });
+
+//       return matchesFilters;
+//     }).toList();
+
+//     setState(() {
+//       _filteredHostels = filteredHostels;
+//     });
 //   }
 
 //   void _showSortOptions(BuildContext context) {
@@ -188,7 +212,7 @@
 //           selectedSortOption: _selectedSortOption,
 //           onSortSelected: (sortedHostels) {
 //             setState(() {
-//               _sortedHostels = sortedHostels;
+//               _filteredHostels = sortedHostels;
 //             });
 //           },
 //         );
@@ -200,9 +224,7 @@
 //     await FirebaseAuth.instance.signOut();
 //     Navigator.pushReplacement(
 //       context,
-//       MaterialPageRoute(
-//         builder: (context) => const LoginPage(),
-//       ),
+//       MaterialPageRoute(builder: (context) => const LoginPage()),
 //     );
 //   }
 // }
@@ -226,7 +248,8 @@ class Student extends StatefulWidget {
 
 class _StudentState extends State<Student> {
   String? _selectedSortOption;
-  List<QueryDocumentSnapshot<Map<String, dynamic>>>? _sortedHostels;
+  List<QueryDocumentSnapshot<Map<String, dynamic>>>? _filteredHostels;
+  Map<String, Set<String>> _appliedFilters = {};
 
   @override
   Widget build(BuildContext context) {
@@ -312,7 +335,13 @@ class _StudentState extends State<Student> {
                       return const Center(child: Text('No hostels available'));
                     }
 
-                    var hostels = _sortedHostels ?? snapshot.data!.docs;
+                    // If filtered hostels are available, use them; otherwise, use original hostels
+                    var hostels = _filteredHostels ?? snapshot.data!.docs;
+
+                    if (hostels.isEmpty) {
+                      return const Center(
+                          child: Text('No hostels match the applied filters.'));
+                    }
 
                     return ListView.builder(
                       itemCount: hostels.length,
@@ -371,14 +400,77 @@ class _StudentState extends State<Student> {
     );
   }
 
-  void _showFilterOptions(BuildContext context) {
-    Navigator.push(
+  void _showFilterOptions(BuildContext context) async {
+    final selectedFilters = await Navigator.push<Map<String, Set<String>>>(
       context,
-      MaterialPageRoute(
-        builder: (context) => const FilterPage(),
-      ),
+      MaterialPageRoute(builder: (context) => const FilterPage()),
     );
+
+    if (selectedFilters != null) {
+      setState(() {
+        _appliedFilters = selectedFilters;
+        _applyFilters();
+      });
+    }
   }
+
+  void _applyFilters() async {
+    final snapshot =
+        await FirebaseFirestore.instance.collection('hostels').get();
+    final allHostels = snapshot.docs;
+
+    final filteredHostels = allHostels.where((hostel) {
+      final hostelData = hostel.data();
+      bool matchesFilters = true;
+
+      _appliedFilters.forEach((category, options) {
+        if (options.isNotEmpty) {
+          // Check if the category exists in hostelData and is not null
+          final value = hostelData[category];
+          if (value != null) {
+            matchesFilters &= options.contains(value.toString());
+          } else {
+            matchesFilters =
+                false; // If the category is null or missing, it doesn't match
+          }
+        }
+      });
+
+      return matchesFilters;
+    }).toList();
+
+    setState(() {
+      _filteredHostels = filteredHostels;
+    });
+  }
+
+/*  void _applyFilters() async {
+    final snapshot =
+        await FirebaseFirestore.instance.collection('hostels').get();
+    final allHostels = snapshot.docs;
+
+    final filteredHostels = allHostels.where((hostel) {
+      final hostelData = hostel.data();
+      bool matchesFilters = true;
+
+      _appliedFilters.forEach((category, options) {
+        if (options.isNotEmpty) {
+          final value = hostelData[category];
+          if (value != null) {
+            matchesFilters &= options.contains(value.toString());
+          } else {
+            matchesFilters = false;
+          }
+        }
+      });
+
+      return matchesFilters;
+    }).toList();
+
+    setState(() {
+      _filteredHostels = filteredHostels;
+    });
+  }*/
 
   void _showSortOptions(BuildContext context) {
     showModalBottomSheet(
@@ -388,7 +480,7 @@ class _StudentState extends State<Student> {
           selectedSortOption: _selectedSortOption,
           onSortSelected: (sortedHostels) {
             setState(() {
-              _sortedHostels = sortedHostels;
+              _filteredHostels = sortedHostels;
             });
           },
         );
@@ -400,9 +492,7 @@ class _StudentState extends State<Student> {
     await FirebaseAuth.instance.signOut();
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(
-        builder: (context) => const LoginPage(),
-      ),
+      MaterialPageRoute(builder: (context) => const LoginPage()),
     );
   }
 }

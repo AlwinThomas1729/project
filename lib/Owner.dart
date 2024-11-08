@@ -289,7 +289,7 @@ class _OwnerState extends State<Owner> {
                     itemCount: hostels.length,
                     itemBuilder: (context, index) {
                       DocumentSnapshot hostel = hostels[index];
-                      String hostelName = hostel['hostel_name'] ?? 'No Name';
+                      String hostelName = hostel['Hostel Name'] ?? 'No Name';
                       String imageUrl = 'assets/hostel.jpg'; // Static image URL
 
                       return HostelCard(
