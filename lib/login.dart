@@ -268,44 +268,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
 
-/*void routeUser() async {
-    User? user = _auth.currentUser;
-    if (user != null) {
-      var userEmail = user.email;
-
-      // Check if the email is admin@gmail.com and directly navigate to AdminWidget
-      if (userEmail == "admin@gmail.com") {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => AdminWidget()),
-        );
-        return;
-      }
-
-      // Otherwise, fetch the user's role from Firestore
-      var documentSnapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.uid)
-          .get();
-
-      if (documentSnapshot.exists) {
-        String role = documentSnapshot.get('role');
-        if (role == "Owner") {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const Owner()),
-          );
-        } else {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const Student()),
-          );
-        }
-      }
-    }
-  }
-*/
-
   void _showError(FirebaseAuthException e) {
     String errorMessage = 'Oops... something went wrong.';
 

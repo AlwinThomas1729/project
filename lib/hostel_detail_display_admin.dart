@@ -1,4 +1,5 @@
 
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -7,7 +8,7 @@ const Color textColor = Colors.blue; // Text color
 
 class HostelDetailPage extends StatelessWidget {
   final String hostelId;
-  final String userEmail; // Confirm logged-in user via email
+  final String userEmail;
 
   const HostelDetailPage({
     super.key,
@@ -23,116 +24,120 @@ class HostelDetailPage extends StatelessWidget {
         title: const Text('Hostel Details'),
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal, // Horizontal scrolling for the whole page
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 1.5, // Adjust as needed
-                  padding: const EdgeInsets.all(16.0),
-                  child: FutureBuilder<DocumentSnapshot>(
-                    future: FirebaseFirestore.instance
-                        .collection('hostels')
-                        .doc(hostelId)
-                        .get(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator());
-                      }
+        child: FutureBuilder<DocumentSnapshot>(
+          future: FirebaseFirestore.instance
+              .collection('temphostels')
+              .doc(hostelId)
+              .get(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-                      if (!snapshot.hasData || !snapshot.data!.exists) {
-                        return const Center(child: Text('Hostel not found'));
-                      }
+            if (!snapshot.hasData || !snapshot.data!.exists) {
+              return const Center(child: Text('Hostel not found'));
+            }
 
-                      var hostelData = snapshot.data!.data() as Map<String, dynamic>;
+            var hostelData = snapshot.data!.data() as Map<String, dynamic>;
 
-                      // Remove unwanted fields
-                      hostelData.remove('timestamp');
-                      hostelData.remove('hostel_id');
-                      hostelData.remove('userEmail');
+            // Debug: Check data structure
+            print('Hostel Data: $hostelData'); // Debugging print
 
-                      return SingleChildScrollView(
-                        scrollDirection: Axis.vertical, // Vertical scrolling for the content
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: hostelData.entries.map((entry) {
-                            return buildKeyValueWidget(entry.key, entry.value);
-                          }).toList(),
-                        ),
-                      );
+            // Remove unwanted fields
+            hostelData.remove('timestamp');
+            hostelData.remove('Hostel Id');
+            // hostelData.remove('userEmail');
+            //
+            return Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: hostelData.length,
+                    itemBuilder: (context, index) {
+                      var entry = hostelData.entries.elementAt(index);
+                      return buildKeyValueWidget(entry.key, entry.value);
                     },
                   ),
                 ),
-              ),
-            ),
-            // Buttons at the bottom center
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: () async {
-                      // Fetch hostel details
-                      var snapshot = await FirebaseFirestore.instance
-                          .collection('hostels')
-                          .doc(hostelId)
-                          .get();
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () async {
+                          try {
+                            var snapshot = await FirebaseFirestore.instance
+                                .collection('temphostels')
+                                .doc(hostelId)
+                                .get();
 
-                      if (snapshot.exists) {
-                        var hostelData = snapshot.data() as Map<String, dynamic>;
+                            if (snapshot.exists) {
+                              var hostelData = snapshot.data() as Map<String, dynamic>;
 
-                        // Add the hostel data to 'hostels2' collection
-                        await FirebaseFirestore.instance.collection('hostels2').add(hostelData);
+                              await FirebaseFirestore.instance
+                                  .collection('hostels')
+                                  .add(hostelData);
 
-                        // Get the hostel name from the data
-                        String hostelName = hostelData['hostel_name'] ?? 'Unknown Hostel';
+                              String hostelName = hostelData['Hostel Name'] ?? 'Unknown Hostel';
 
-                        // Show confirmation SnackBar with the hostel name
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Hostel $hostelName approved')),
-                        );
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Hostel $hostelName approved')),
+                              );
 
-                        // Navigate back to NewHostels widget (assumes NewHostels is a named route)
-                        Navigator.pop(context); // Navigates back to the previous page (NewHostels)
-                      }
-                    },
-                    child: const Text('Approve'),
+                              await FirebaseFirestore.instance
+                                  .collection('temphostels')
+                                  .doc(hostelId)
+                                  .delete();
+
+                              Navigator.pop(context);
+                            }
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Failed to approve hostel: $e')),
+                            );
+                          }
+                        },
+                        child: const Text('Approve'),
+                      ),
+                      const SizedBox(width: 16),
+                      ElevatedButton(
+                        onPressed: () async {
+                          await FirebaseFirestore.instance
+                              .collection('temphostels')
+                              .doc(hostelId)
+                              .delete();
+
+                          Navigator.pop(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                        ),
+                        child: const Text('Delete'),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 16), // Space between buttons
-                  ElevatedButton(
-                    onPressed: () {
-                      // Add Delete button functionality here
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red, // Red color for delete button
-                    ),
-                    child: const Text('Delete'),
-                  ),
-                ],
-              ),
-            ),
-          ],
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
   }
 
   Widget buildKeyValueWidget(String key, dynamic value) {
+    print('$key: $value'); // Debugging print for each key-value pair
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment
-            .start, // Align at the top for better key-value display
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Key part
           SizedBox(
-            width: 150, // Fixed width for key text to avoid overflow
+            width: 150,
             child: Text(
-              key
-                  .replaceAll('_', ' ')
-                  .capitalizeFirstOfEach(), // Format the key
+              key.replaceAll('_', ' ').capitalizeFirstOfEach(),
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -140,14 +145,12 @@ class HostelDetailPage extends StatelessWidget {
               ),
             ),
           ),
-
-          // Value part
           Expanded(
             child: Text(
-              value?.toString() ?? 'Not provided', // Handle null values
+              value?.toString() ?? 'Not provided',
               style: const TextStyle(fontSize: 18, color: textColor),
-              overflow: TextOverflow.ellipsis, // Truncate long text
-              maxLines: 3, // Limit the number of lines
+              overflow: TextOverflow.ellipsis,
+              maxLines: 3,
             ),
           ),
         ],
@@ -156,7 +159,6 @@ class HostelDetailPage extends StatelessWidget {
   }
 }
 
-// Extension to capitalize the first letter of each word
 extension StringExtension on String {
   String capitalizeFirstOfEach() {
     return split(' ').map((word) {

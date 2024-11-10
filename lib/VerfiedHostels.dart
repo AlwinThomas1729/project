@@ -1,32 +1,24 @@
 
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'hostel_details_display_verified.dart'; // Assuming you have this page for hostel details
 
-import 'login.dart';
-import 'hostel_detail_display_admin.dart';
-import 'admin_drawer.dart';
+class VerifiedHostels extends StatelessWidget {
+  const VerifiedHostels({super.key});
 
-class NewHostels extends StatefulWidget {
-  const NewHostels({super.key});
-
-  @override
-  State<NewHostels> createState() => _NewHostelsState();
-}
-
-class _NewHostelsState extends State<NewHostels> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "PGFinder",
+          "Verified Hostels",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         backgroundColor: Colors.blueAccent,
       ),
-      drawer: const CustomDrawer(),
       body: SafeArea(
         child: Container(
           color: Colors.red[50],
@@ -35,15 +27,15 @@ class _NewHostelsState extends State<NewHostels> {
               Expanded(
                 child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                   stream: FirebaseFirestore.instance
-                      .collection('temphostels')
-                      .snapshots(), // Use snapshots() to listen for real-time updates
+                      .collection('hostels')
+                      .snapshots(), // Listening for real-time updates in the 'hostels' collection
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
                     }
 
                     if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                      return const Center(child: Text('No new Hostels'));
+                      return const Center(child: Text('No hostels available'));
                     }
 
                     var hostels = snapshot.data!.docs;
@@ -54,7 +46,8 @@ class _NewHostelsState extends State<NewHostels> {
                         var hostelData = hostels[index].data();
                         var hostelName =
                             hostelData['Hostel Name'] ?? 'Unnamed Hostel';
-                        var imageUrl = 'assets/hostel.jpg';
+                        var imageUrl = 'assets/hostel.jpg'; // Replace with actual image if available
+                        var userEmail = hostelData['userEmail'] ?? ''; // Fetch the userEmail from the hostel data
 
                         return Card(
                           margin: const EdgeInsets.symmetric(
@@ -80,8 +73,7 @@ class _NewHostelsState extends State<NewHostels> {
                                   MaterialPageRoute(
                                     builder: (context) => HostelDetailPage(
                                       hostelId: hostels[index].id,
-                                      userEmail: FirebaseAuth
-                                          .instance.currentUser!.email!,
+                                      userEmail: userEmail, // Pass userEmail fetched from the hostel data
                                     ),
                                   ),
                                 );
@@ -104,14 +96,6 @@ class _NewHostelsState extends State<NewHostels> {
           ),
         ),
       ),
-    );
-  }
-
-  Future<void> logout(BuildContext context) async {
-    await FirebaseAuth.instance.signOut();
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const LoginPage()),
     );
   }
 }

@@ -2,7 +2,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'login.dart'; // Import the LoginPage
-import 'NewHostels.dart';
+import 'NewHostels.dart'; // Import the NewHostels page
+import 'VerfiedHostels.dart'; // Import the VerifiedHostels page
+
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key});
 
@@ -39,17 +41,19 @@ class CustomDrawer extends StatelessWidget {
               Navigator.pop(context);
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) =>  NewHostels()),
+                MaterialPageRoute(builder: (context) => const NewHostels()),
               );
             },
           ),
-
           ListTile(
             leading: const Icon(Icons.verified),
             title: const Text('Verified Hostels'),
             onTap: () {
               Navigator.pop(context); // Close the drawer
-              // Navigate to Verified Hostels page if needed
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const VerifiedHostels()),
+              );
             },
           ),
           const Divider(),
@@ -80,4 +84,3 @@ class CustomDrawer extends StatelessWidget {
     }
   }
 }
-

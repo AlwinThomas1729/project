@@ -119,7 +119,7 @@ class _StudentState extends State<Student> {
                       itemBuilder: (context, index) {
                         var hostelData = hostels[index].data();
                         var hostelName =
-                            hostelData['hostel_name'] ?? 'Unnamed Hostel';
+                            hostelData['Hostel Name'] ?? 'Unnamed Hostel';
                         var imageUrl = 'assets/hostel.jpg';
 
                         return Card(

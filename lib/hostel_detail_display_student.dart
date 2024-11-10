@@ -48,7 +48,7 @@ class HostelDetailPage extends StatelessWidget {
                 // Remove unwanted fields
                 hostelData.remove('timestamp');
                 hostelData.remove('hostel_id');
-                hostelData.remove('userEmail');
+                //hostelData.remove('userEmail');
 
                 return SingleChildScrollView(
                   scrollDirection:

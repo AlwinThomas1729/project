@@ -189,20 +189,20 @@ class _SortPopupState extends State<SortPopup> {
     // Sorting logic
     if (criteria == 'Rent') {
       hostels.sort((a, b) {
-        int rankA = _mapRentToValue(a['rent'] as String?);
-        int rankB = _mapRentToValue(b['rent'] as String?);
+        int rankA = _mapRentToValue(a['Rent'] as String?);
+        int rankB = _mapRentToValue(b['Rent'] as String?);
         return rankA.compareTo(rankB);
       });
     } else if (criteria == 'Distance') {
       hostels.sort((a, b) {
-        int rankA = _mapDistanceToValue(a['distance'] as String?);
-        int rankB = _mapDistanceToValue(b['distance'] as String?);
+        int rankA = _mapDistanceToValue(a['Distance'] as String?);
+        int rankB = _mapDistanceToValue(b['Distance'] as String?);
         return rankA.compareTo(rankB);
       });
     } else if (criteria == 'Mess') {
       hostels.sort((a, b) {
-        int rankA = _mapMessToValue(a['mess'] as String?);
-        int rankB = _mapMessToValue(b['mess'] as String?);
+        int rankA = _mapMessToValue(a['Mess'] as String?);
+        int rankB = _mapMessToValue(b['Mess'] as String?);
         return rankA.compareTo(rankB);
       });
     }
