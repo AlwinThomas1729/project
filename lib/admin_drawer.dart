@@ -2,7 +2,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'login.dart'; // Import the LoginPage
-
+import 'NewHostels.dart';
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key});
 
@@ -35,13 +35,13 @@ class CustomDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.new_releases),
             title: const Text('New Hostels'),
-            /*onTap: () {
+            onTap: () {
               Navigator.pop(context);
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const NewHostels()),
+                MaterialPageRoute(builder: (context) =>  NewHostels()),
               );
-            },*/
+            },
           ),
 
           ListTile(

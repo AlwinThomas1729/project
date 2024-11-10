@@ -230,6 +230,47 @@ class _LoginPageState extends State<LoginPage> {
   void routeUser() async {
     User? user = _auth.currentUser;
     if (user != null) {
+      // Fetch the user's role from Firestore
+      var documentSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
+
+      if (documentSnapshot.exists) {
+        String role = documentSnapshot.get('role');
+
+        if (role == "admin") {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const AdminWidget()),
+          );
+        } else if (role == "Owner") {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const Owner()),
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const Student()),
+          );
+        }
+      } else {
+        // If the role is not found, navigate to a default screen or show an error
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("User role not found. Please contact support.")),
+        );
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
+  }
+
+
+/*void routeUser() async {
+    User? user = _auth.currentUser;
+    if (user != null) {
       var userEmail = user.email;
 
       // Check if the email is admin@gmail.com and directly navigate to AdminWidget
@@ -263,35 +304,7 @@ class _LoginPageState extends State<LoginPage> {
       }
     }
   }
-
-  /*void routeUser() async {
-    User? user = _auth.currentUser;
-    if (user != null) {
-      var userEmail = user.email;
-
-      if (userEmail == "admin@gmail.com") {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => const AdminWidget()));
-        return;
-      }
-
-      var documentSnapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.uid)
-          .get();
-
-      if (documentSnapshot.exists) {
-        String role = documentSnapshot.get('role');
-        if (role == "Owner") {
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => const Owner()));
-        } else {
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => const Student()));
-        }
-      }
-    }
-  }*/
+*/
 
   void _showError(FirebaseAuthException e) {
     String errorMessage = 'Oops... something went wrong.';
