@@ -3,12 +3,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-const Color pageBackground = Color.fromARGB(255, 186, 180, 185);
-const Color appBarColor = Color.fromARGB(255, 192, 223, 21);
-const Color submitButtonColor = Colors.green; // Color for submit button
-const Color inputBoxColor =
-    Color.fromARGB(255, 205, 153, 210); // Color for input box
-const Color inputTextColor = Colors.purple; // Color for input text
+ Color pageBackground = Colors.blue[400] ?? Colors.blue;
+ Color appBarColor = Colors.blue[600] ?? Colors.blue;
+Color submitButtonColor = Colors.blue[400] ?? Colors.blue; // Color for submit button
+ Color inputBoxColor =Colors.white70;
+     // Color for input box
+ Color inputTextColor = Colors.blue[600] ?? Colors.blue; // Color for input text
 
 class AddHostel extends StatefulWidget {
   const AddHostel({super.key});
@@ -218,12 +218,12 @@ class _AddHostelState extends State<AddHostel> {
           labelText: question,
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: inputTextColor)),
+              borderSide:  BorderSide(color: inputTextColor)),
           fillColor: inputBoxColor,
           filled: true,
         ),
         keyboardType: keyboardType,
-        style: const TextStyle(color: inputTextColor),
+        style:  TextStyle(color: inputTextColor),
         onChanged: (value) {
           setState(() {});
         },
@@ -239,7 +239,7 @@ class _AddHostelState extends State<AddHostel> {
           labelText: question,
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: inputTextColor)),
+              borderSide:  BorderSide(color: inputTextColor)),
           fillColor: inputBoxColor,
           filled: true,
         ),
@@ -249,7 +249,7 @@ class _AddHostelState extends State<AddHostel> {
                   value: option,
                   child: Text(
                     option,
-                    style: const TextStyle(color: inputTextColor),
+                    style:  TextStyle(color: inputTextColor),
                   ),
                 ))
             .toList(),
