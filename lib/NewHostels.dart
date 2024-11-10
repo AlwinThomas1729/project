@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'login.dart';
 import 'hostel_detail_display_admin.dart';
-import 'student_drawer.dart';
+import 'admin_drawer.dart';
 
 class NewHostels extends StatefulWidget {
   const NewHostels({super.key});

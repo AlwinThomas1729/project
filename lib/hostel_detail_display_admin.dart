@@ -1,5 +1,4 @@
 
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -28,8 +27,7 @@ class HostelDetailPage extends StatelessWidget {
           children: [
             Expanded(
               child: SingleChildScrollView(
-                scrollDirection:
-                Axis.horizontal, // Horizontal scrolling for the whole page
+                scrollDirection: Axis.horizontal, // Horizontal scrolling for the whole page
                 child: Container(
                   width: MediaQuery.of(context).size.width * 1.5, // Adjust as needed
                   padding: const EdgeInsets.all(16.0),
@@ -75,8 +73,30 @@ class HostelDetailPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
-                    onPressed: () {
-                      // Add Approve button functionality here
+                    onPressed: () async {
+                      // Fetch hostel details
+                      var snapshot = await FirebaseFirestore.instance
+                          .collection('hostels')
+                          .doc(hostelId)
+                          .get();
+
+                      if (snapshot.exists) {
+                        var hostelData = snapshot.data() as Map<String, dynamic>;
+
+                        // Add the hostel data to 'hostels2' collection
+                        await FirebaseFirestore.instance.collection('hostels2').add(hostelData);
+
+                        // Get the hostel name from the data
+                        String hostelName = hostelData['hostel_name'] ?? 'Unknown Hostel';
+
+                        // Show confirmation SnackBar with the hostel name
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Hostel $hostelName approved')),
+                        );
+
+                        // Navigate back to NewHostels widget (assumes NewHostels is a named route)
+                        Navigator.pop(context); // Navigates back to the previous page (NewHostels)
+                      }
                     },
                     child: const Text('Approve'),
                   ),
