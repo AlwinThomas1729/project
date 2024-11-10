@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'login.dart';
-import 'hostel_detail_display_student.dart';
+import 'hostel_detail_display_admin.dart';
 import 'student_drawer.dart';
 
 class NewHostels extends StatefulWidget {
